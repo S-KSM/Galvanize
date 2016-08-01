@@ -1,0 +1,39 @@
+---
+title: "q3"
+author: "Shobeir K. S. Mazinani"
+date: "August 1, 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## My questions:
+
+The initial questions about this A/B testing are as following:
+
+  1  Is there only one change per scenario or not?
+  2  Are the test cases randomly assigned throughout the week or are they done one by one?
+  
+The second question is very important because the Quote giving rates might have different some timely (seasonal) pattern. I am assuming that there is uniform distribution of the different scenarios per weekday. Also I am assuming that each scenario is separated by only one change from another scenario. 
+
+Due to lack of information about the variances of each scenario results, I will use the ChiSquared test. Chi-squared test compares the frequencies and does not have an assumption regarding the distribution of the results. 
+
+We have the following data:
+
+```{r}
+mytbl <- read.csv("./tests.csv")
+mytbl
+```
+
+My null hypothesis is that the differences in the results are not caused by random errors. Performing the Chi-Squared test:
+
+```{r}
+mytest <- chisq.test(mytbl[2:3])
+```
+
+Since the p-value for this test is `r mytest$p.value` is smaller than 0.05, we can propose that with 95% confidence, the differences are significant and it is very unlikely that the observation is merely the result of fluctuations.
+
+It is worth noting that the confidence level should have been set (i.e. 95% vs 99%) before the testing was performed (at the time of desgining the experiment).
+Also the sample sizes could have been more uniform. 
